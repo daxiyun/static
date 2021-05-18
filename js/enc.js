@@ -9,9 +9,9 @@ function base64(data, method) {
 
 function sm3(data, method = 64) {
     var data = SM3Util(data);
+    if (method === 64) return data;
     if (method === 16) return data.slice(0, 16);
     if (method === 32) return data.slice(0, 32);
-    if (method === 64) return data;
 }
 
 function md5(data, method = 32) {
