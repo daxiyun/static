@@ -26,7 +26,7 @@ function md5(data, method = 32) {
 function sm4(data, key, method) {
 	// ECB
 	var s4 = new SM4Util();
-	s4.secretKey = md5(key)
+	s4.secretKey = sm3(key, 16)
 	if (method === "en") {
 		return s4.encryptData_ECB(data);
 	}
