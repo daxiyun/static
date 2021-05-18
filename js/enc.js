@@ -1,4 +1,4 @@
-function base64(method, data) {
+function base64(data, method) {
     if (method === "en") {
         return CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(data));
     }
@@ -23,7 +23,7 @@ function md5(data, method = 32) {
     }
 }
 
-function sm4(method, data, key) {
+function sm4(data, key, method) {
 	// ECB
 	var s4 = new SM4Util();
 	s4.secretKey = md5(key)
@@ -36,7 +36,7 @@ function sm4(method, data, key) {
 	}
 }
 
-function aes(method, key, data) {
+function aes(data, key, method) {
     // CBC
     var key = md5(key);
     if (method === "en") {
