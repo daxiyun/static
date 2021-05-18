@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <title>上传文件</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://nan.pages.dev/js/enc.js"></script>
+</head>
+<body style="width: 960px;margin: 0 auto;">
+    <div style="padding: 10px;border-top: 2px solid #FF7800;">
+        <input type="file" name="file" />
+    </div>
+    <span id="return"></span>
+    <script>
+        var person = window.prompt("请输入解密密码", "");
+        if (person != null) {
+            document.cookie = person + ";secure";
+        }
+        $(":file").change(function () {
+                    var reader = new FileReader(); //这是核心,读取操作就是由它完成.
+                    reader.readAsArrayBuffer($(':file')[0].files[0]); //读取文件的内容,也可以读取文件的URL
+                    reader.onload = function () {
+                        var data = {
+                            "message": "update file",
+                            "content": window.btoa(String.fromCharCode(...new Uint8Array(this.result)))
+                        };
+                        $.ajax({
+                            type: "put",
+                            url: "https://api.github.com/repos/daxiyun/cloudflare-pages/contents/bookmark/" + $(':file')[0].files[0].name,
+                            headers: {
+                                "Authorization": "token " + sm4("6d1230f337fae6e031be524c8a254b5abe5068d1b51441c529a6d7d2dcc7a77b775f3d68d27ba44c134c376e8c6d0607", document.cookie, "de")
+                            },
+                            data: JSON.stringify(data),
+                            success: function (result) {
+                                $("#return").html("上传成功。");
+                            }
+                        });
+                    }
+                })
+    </script>
+</body>
+</html>
